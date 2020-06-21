@@ -1,0 +1,17 @@
+ion-item {
+    --background-hover: var(--ion-color-dark);
+}
+
+ion-toolbar {
+    --background: var(--ion-color-danger);
+    --color: white;
+}
+
+
+ion-split-pane {
+    --side-width:150px;
+}
+
+.iconSize {
+    font-size: 20px;
+}
