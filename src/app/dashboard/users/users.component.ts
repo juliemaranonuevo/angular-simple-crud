@@ -11,4 +11,10 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {}
 
+  public formMode1;
+  public catchTheValueEmitted(event: string) {
+    this.formMode1 = event;
+    alert(event);
+  }
+
 }

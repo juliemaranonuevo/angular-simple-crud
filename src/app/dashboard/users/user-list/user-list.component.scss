@@ -1,0 +1,43 @@
+ion-card {
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.header-cell-class {
+    border-color: #ddd; 
+    border-width: .01em; 
+    border-style:solid; 
+    margin-bottom : -1px;
+    background-color: lightgrey
+}
+
+.content-cell-class {
+    border-color: #ddd; 
+    border-width: .01em; 
+    border-style:solid; 
+    margin-bottom : -1px;
+}
+
+.bTn {
+    --background: #FFCA22;
+    --color: white;
+}
+
+// .iconSize {
+//     font-size: 20px;
+// }
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+  
+th, td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ddd;
+}

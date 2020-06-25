@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -12,13 +12,18 @@ import { FooterComponent } from '../footer/footer.component';
 import { SideMenuComponent } from '../side-menu/side-menu.component';
 import { InitialComponent } from './initial/initial.component';
 import { UsersComponent } from './users/users.component';
+import { UserAddComponent } from './users/user-add/user-add.component';
+import { UserListComponent } from './users/user-list/user-list.component';
+import { UserFormComponent } from './users/user-form/user-form.component';
+import { UserEditComponent } from './users/user-edit/user-edit.component';
+
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     IonicModule,
-    DashboardPageRoutingModule
+    DashboardPageRoutingModule,
+    ReactiveFormsModule
   ],
   declarations: [
     DashboardPage, 
@@ -26,7 +31,11 @@ import { UsersComponent } from './users/users.component';
     FooterComponent, 
     SideMenuComponent,
     InitialComponent,
-    UsersComponent
+    UsersComponent,
+    UserAddComponent,
+    UserListComponent,
+    UserFormComponent,
+    UserEditComponent
   ]
 })
 export class DashboardPageModule {}

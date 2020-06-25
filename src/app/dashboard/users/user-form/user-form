@@ -1,0 +1,72 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Observable } from 'rxjs';
+
+const DEFAULT_CROPPED_IMAGE = "assets/icon/photo.png";
+
+@Component({
+  selector: 'app-user-form',
+  templateUrl: './user-form.component.html',
+  styleUrls: ['./user-form.component.scss'],
+})
+export class UserFormComponent implements OnInit {
+  id: number;
+  editMode = false;
+  userForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
+
+  ngOnInit() {
+    this.route.params.subscribe((params: Params) => {
+      this.id = +params['id'];
+      this.editMode = params['id'] != null;
+    });
+    
+    this.userForm = new FormGroup({
+      'firstName': new FormControl(null, [Validators.required, Validators.minLength(5)]),
+      'middleName': new FormControl(null, [Validators.required, Validators.minLength(5)]),
+      'lastName': new FormControl(null),
+      'extensionName': new FormControl(null),
+      'address': new FormControl(null),
+      'emailAddress': new FormControl(null),
+      'contactNumber': new FormControl(null)
+    });
+
+    this.userForm.statusChanges.subscribe(
+      (status) => console.log(status)
+    );
+  }
+
+  public croppedImage: string = DEFAULT_CROPPED_IMAGE;
+  
+  onSubmit() {
+    console.log(this.userForm.value);
+    // this.userForm.reset();
+  }
+
+  //Validation
+
+  public get isFirstNameEmpty(): boolean {
+    let firstName = this.userForm.controls.firstName;
+    if (firstName.invalid) {
+      return firstName.errors.required && firstName.touched;
+    } else {
+      return false;
+    }
+  }
+
+  public get isFirstNameBelowMinLength(): boolean {
+    let firstName = this.userForm.controls.firstName;
+    if (firstName.invalid) {
+      return firstName.errors.minlength && firstName.touched;
+    } else {
+      return false;
+    }
+  }
+  
+}
