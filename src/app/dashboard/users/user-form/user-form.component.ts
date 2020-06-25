@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@ang
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
+import { User } from 'src/app/core/model/user.model';
 
 const DEFAULT_CROPPED_IMAGE = "assets/icon/photo.png";
 
@@ -53,8 +54,21 @@ export class UserFormComponent implements OnInit {
 
   private saveUserDetails(): void {
     this.isSavingUserDetails = true;
-    // console.log(this.userForm.value);
-    this.userService.addUser(this.userForm.value);
+    this.userService.addUser(this.userForm.value).subscribe(
+    //  (output) => {console.log(output)},
+     this.isSavingProductDetailsSuccessful.bind(this),
+    );
+  }
+
+  private isSavingProductDetailsSuccessful(data): void {
+    this.resetUserForm();
+    this.isSavingUserDetails = false;
+    console.log(data.message),
+    alert(data.message);
+  }
+
+  private resetUserForm() {
+    this.userForm.reset();
   }
 
   //Validation
