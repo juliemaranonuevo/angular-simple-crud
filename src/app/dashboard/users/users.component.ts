@@ -9,7 +9,9 @@ export class UsersComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // alert('s')
+  }
 
   public formMode1;
   public catchTheValueEmitted(event: string) {

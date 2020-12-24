@@ -1,0 +1,17 @@
+{
+  "appId": "com.frontend.crud",
+  "appName": "crud",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {},
+  "server": {
+    "url": "http://192.168.1.10:8100",
+    "cleartext": true
+  }
+}

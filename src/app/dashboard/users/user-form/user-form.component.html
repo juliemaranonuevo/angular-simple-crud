@@ -1,60 +1,152 @@
+<ion-grid>
+    <ion-row>
+        <ion-col  size="12" no-padding *ngIf="error">
+            <ion-card color="danger">
+                <ion-card-header>
+                    <ion-card-title>
+                        An error occured!
+                    </ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <p>{{ error }}</p>
+                    <ion-button (click)="onHandleError()">Okay</ion-button>
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+    </ion-row>
+</ion-grid>
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()" #f="ngForm">
     <ion-card>
+        <ion-progress-bar
+            type="indeterminate"
+            *ngIf="isSavingUserDetails"
+        ></ion-progress-bar>
         <ion-grid>
             <ion-item-group>
                 <ion-item-divider color="medium">
-                  <ion-label>
-                      Image
-                  </ion-label>
+                <ion-label>
+                    Image
+                </ion-label>
                 </ion-item-divider>
                 <ion-row>
-                    <ion-col size="12" size-md="2" class="ion-text-right">
+                    <ion-col size="12" size-md="4" class="ion-text-right">
                         <ion-img [src]="croppedImage" style="width: 100%;"></ion-img>
                     </ion-col>
-                    <ion-col size="12" size-md="10" class="ion-text-center ion-text-md-start">
+                    <ion-col size="12" size-md="8" class="ion-text-center ion-text-md-start">
                         <ion-label style="margin-top: 10px;">
-                            <h3>Upload User Photo</h3>
+                            <h3>Upload User Photo <ion-text color="danger">*</ion-text></h3>
                             <p
-                              style="text-decoration: underline;"
-                              (click)="fileInput.click()"
+                            style="text-decoration: underline; cursor: pointer;"
+                            (click)="fileInput.click()"
                             >
                                 Click here to upload
                             </p>
                         </ion-label>
                         <br>
+                        <p class=" text-left">
+                            Image format: jpeg, jpg, png<br>
+                            File size: Less than 700KB
+                        </p>
                         <br>
+                        
+                        <!-- style="display: none;" -->
+                        <input
+                            type="file"
+                            (change)="onFileChange($event)"
+                            #fileInput
+                           
+                            formControlName="image"
+                            accept=".jpg,.png"
+                        />
+
+                      
+                        <div class="ion-text-center ion-text-md-start">
+                            <ion-text color="danger" 
+                                *ngIf="!userForm.get('image').valid && 
+                                        userForm.get('image').touched && 
+                                        userForm.get('image').errors['required']"
+                            >Required!</ion-text>
+                            <ion-text color="danger" *ngIf="isProductPhotoMaxFileSizeExceed && isSelectedSinglePhoto">
+                                The photo you've selected exceed the maximum file size.
+                            </ion-text>
+                            <ion-text color="danger" *ngIf="isProductPhotoBelowMinFileSize && isSelectedSinglePhoto">
+                                The photo you've selected is below the minimum file size.
+                            </ion-text>
+                            <ion-text color="danger" *ngIf="
+                                (isProductPhotoMaxFileSizeExceed ||
+                                isProductPhotoBelowMinFileSize) &&
+                                !isSelectedSinglePhoto
+                            ">
+                                Some of the selected photos probably exceed to 2MB or below than 500KB.
+                            </ion-text>
+                        </div>
                     </ion-col>
                 </ion-row>
             </ion-item-group>
             <ion-item-divider color="medium">
                 <ion-label>
-                    Personal Information
+                    Personal Information {{id1}}
                 </ion-label>
+                <p *ngFor="let user of userDetail">
+                    {{ user.id  }}
+                    {{ user.first_name  }}
+                    {{ user.middle_name  }}
+                </p>
             </ion-item-divider>
             <ion-list lines="full" class="ion-no-margin ion-no-padding">
                 <ion-row>
-                    <ion-col size="12" size-md="6">
+                    <ion-col size="12">
                         <ion-item>
                             <ion-label position="floating">
                                 User ID <ion-text color="danger">*</ion-text>
+                                <ion-text *ngIf="userForm.get('userId').pending">
+                                    checking if the user I.D. is existing<ion-spinner
+                                    name="dots"
+                                    ></ion-spinner>
+                                </ion-text>
+                                <ion-icon
+                                    *ngIf="userForm.get('userId').valid"
+                                    name="checkmark-circle"
+                                ></ion-icon>
                             </ion-label>
-                            <ion-input type="text" formControlName="userId"></ion-input>
+                            <ion-input 
+                                type="text"
+                                formControlName="userId" 
+                                clearInput
+                                class="ion-text-uppercase"
+
+                            ></ion-input>
+                            <!-- (ionChange)="transformToCapitalLetter($event)" -->
                         </ion-item>
-                        <div class="ion-text-center" 
-                            *ngIf="!userForm.get('userId').valid && userForm.get('userId').touched">
-                            <ion-text color="danger" 
-                                *ngIf="userForm.get('userId').errors['required']"
-                            >Required!</ion-text>
+                        <div class="ion-text-center">
+                            <!-- <ion-text color="danger" 
+                                *ngIf="!userForm.get('userId').valid && 
+                                userForm.get('userId').touched &&
+                                userForm.get('userId').errors['required']"
+                            >Required!</ion-text> -->
+
+                            <ion-text color="danger" *ngIf="isProductCodeEmpty">
+                                Please enter user ID.
+                            </ion-text>
+                            <ion-text color="danger" *ngIf="isProductCodeDuplicate">
+                                Invalid! Duplicate User ID.
+                            </ion-text>
+
                         </div>
                     </ion-col>
                 </ion-row>
                 <ion-row>
-                    <ion-col size="12" size-md="3">
+                    <ion-col size="12">
                         <ion-item>
-                                <ion-label position="floating">
-                                    First Name <ion-text color="danger">*</ion-text>
-                                </ion-label>
-                                <ion-input type="text" formControlName="firstName"></ion-input>
+                            <ion-label position="floating">
+                                First Name <ion-text color="danger">*</ion-text>
+                            </ion-label>
+                            <ion-input 
+                                type="text" 
+                                formControlName="firstName" 
+                                clearInput
+                                class="ion-text-capitalize"
+                            ></ion-input>
                         </ion-item>
                         <div class="ion-text-center" 
                             *ngIf="!userForm.get('firstName').valid && userForm.get('firstName').touched">
@@ -66,22 +158,20 @@
                             >invalid Input!</ion-text>
                         </div>
                     </ion-col>
-                    <ion-col size="12" size-md="3">
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
                         <ion-item>
-                              <ion-label position="floating">
-                                  Midle Name <ion-text color="danger">*</ion-text>
-                              </ion-label>
-                              <ion-input type="text" formControlName="middleName"></ion-input>
+                            <ion-label position="floating">
+                                Midle Name <ion-text color="danger">*</ion-text>
+                            </ion-label>
+                            <ion-input 
+                                type="text" 
+                                formControlName="middleName" 
+                                clearInput
+                                class="ion-text-capitalize"
+                            ></ion-input>
                         </ion-item>
-                        <!-- <div class="ion-text-center" 
-                            *ngIf="!userForm.get('middleName').valid && userForm.get('middleName').touched">
-                            <ion-text color="danger" 
-                                *ngIf="userForm.get('middleName').errors['required']"
-                            >Required!</ion-text>
-                            <ion-text color="danger" 
-                                *ngIf="userForm.get('middleName').errors['minLength']"
-                            >Too Short!</ion-text>
-                        </div> -->
                         <div class="ion-text-center" 
                             *ngIf="!userForm.get('middleName').valid && userForm.get('middleName').touched">
                             <ion-text color="danger" 
@@ -89,12 +179,19 @@
                             >Required!</ion-text>
                         </div>
                     </ion-col>
-                    <ion-col size="12" size-md="3">
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
                         <ion-item>
-                              <ion-label position="floating">
-                                  Last Name <ion-text color="danger">*</ion-text>
-                              </ion-label>
-                              <ion-input type="text" formControlName="lastName"></ion-input>
+                            <ion-label position="floating">
+                                Last Name <ion-text color="danger">*</ion-text>
+                            </ion-label>
+                            <ion-input 
+                                type="text" 
+                                formControlName="lastName" 
+                                clearInput
+                                class="ion-text-capitalize"
+                            ></ion-input>
                         </ion-item>
                         <div class="ion-text-center" 
                             *ngIf="!userForm.get('lastName').valid && userForm.get('lastName').touched">
@@ -103,22 +200,34 @@
                             >Required!</ion-text>
                         </div>
                     </ion-col>
-                    <ion-col size="12" size-md="3">
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
                         <ion-item>
                             <ion-label position="floating">
                                 Extension Name <ion-text color="danger">Optional</ion-text>
                             </ion-label>
-                            <ion-input type="text" formControlName="extensionName"></ion-input>
+                            <ion-input 
+                                type="text" 
+                                formControlName="extensionName" 
+                                clearInput
+                                class="ion-text-capitalize"
+                            ></ion-input>
                         </ion-item>
                     </ion-col>
                 </ion-row>
                 <ion-row>
-                    <ion-col size="12" size-md="4">
+                    <ion-col size="12">
                         <ion-item>
                             <ion-label position="floating">
                                 Address <ion-text color="danger">*</ion-text>
                             </ion-label>
-                            <ion-input type="text" formControlName="address"></ion-input>
+                            <ion-input 
+                                type="text" 
+                                formControlName="address" 
+                                clearInput
+                                class="ion-text-capitalize"
+                            ></ion-input>
                         </ion-item>
                         <div class="ion-text-center" 
                             *ngIf="!userForm.get('address').valid && userForm.get('address').touched">
@@ -127,12 +236,14 @@
                             >Required!</ion-text>
                         </div>
                     </ion-col>
-                    <ion-col size="12" size-md="4">
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
                         <ion-item>
-                              <ion-label position="floating">
-                                  Email Address <ion-text color="danger">*</ion-text>
-                              </ion-label>
-                              <ion-input type="email" formControlName="emailAddress"></ion-input>
+                            <ion-label position="floating">
+                                Email Address <ion-text color="danger">*</ion-text>
+                            </ion-label>
+                            <ion-input type="email" formControlName="emailAddress" clearInput></ion-input>
                         </ion-item>
                         <div class="ion-text-center" 
                             *ngIf="!userForm.get('emailAddress').valid && userForm.get('emailAddress').touched">
@@ -144,12 +255,14 @@
                             >Invalid input!</ion-text>
                         </div>
                     </ion-col>
-                    <ion-col size="12" size-md="4">
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
                         <ion-item>
-                              <ion-label position="floating">
-                                  Contact Number <ion-text color="danger">*</ion-text>
-                              </ion-label>
-                              <ion-input type="text" formControlName="contactNumber" (keypress)="numberOnly($event)"></ion-input>
+                            <ion-label position="floating">
+                                Contact Number <ion-text color="danger">*</ion-text>
+                            </ion-label>
+                            <ion-input type="text" formControlName="contactNumber" (keypress)="numberOnly($event)" clearInput></ion-input>
                         </ion-item>
                         <!-- <div class="ion-text-center" 
                             *ngIf="!userForm.get('contactNumber').valid && userForm.get('contactNumber').touched">
@@ -176,19 +289,25 @@
                 </ion-row>
                 <br>
                 <ion-row>
-                    <ion-col size-md="2" no-padding>
-                        <ion-button expand="block" margin size="medium" color="danger">
+                    <ion-col size-md="3" no-padding>
+                        <ion-button 
+                            expand="block" 
+                            margin size="medium" 
+                            color="danger"
+                            (click)="confirmReset()"
+                            [disabled]="saveButton"
+                        >
                             <ion-icon slot="start" name="warning-outline" class="iconSize"></ion-icon>
                             Cancel
                         </ion-button>
                     </ion-col>
 
-                    <ion-col  size-md="2">
+                    <ion-col  size-md="3">
                         <ion-button 
                             expand="block" 
                             margin size="medium" 
                             type="submit" 
-                            [disabled]="isSavingUserDetails"
+                            [disabled]="saveButton"
                         >
                             <ion-icon slot="start" name="save-outline" class="iconSize"></ion-icon>
                             Save

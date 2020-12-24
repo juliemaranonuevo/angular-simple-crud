@@ -7,6 +7,7 @@ import { UsersComponent } from './users/users.component';
 import { UserAddComponent } from './users/user-add/user-add.component';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
+import { UserItemComponent } from './users/user-item/user-item.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
           {
             path: 'create',
             component: UserAddComponent
+          },
+          {
+            path: ':id',
+            component: UserItemComponent
           },
           {
             path: ':id/edit',

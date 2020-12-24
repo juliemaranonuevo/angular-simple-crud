@@ -1,12 +1,15 @@
-export class User {
-    public userId: string;
-    public firstName: string;
-    public middleName: string;
-    public lastName: string;
-    public extensionName: string;
-    public address: string;
-    public emailAddress: string;
-    public contactNumber: number;
+export interface User {
+
+    id?:number;
+    image:string[];
+    userId: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    extensionName: string;
+    address: string;
+    emailAddress: string;
+    contactNumber: number;
   
     // constructor (
     //   userId: string, 

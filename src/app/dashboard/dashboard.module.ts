@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
+// import { JwPaginationComponent } from '../../jw-angular-pagination';
 
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
@@ -16,8 +17,10 @@ import { UserAddComponent } from './users/user-add/user-add.component';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { UserFormComponent } from './users/user-form/user-form.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
+import { UserFormModalComponent } from './users/user-form/user-form-modal/user-form-modal.component';
+import { UserItemComponent } from './users/user-item/user-item.component';
 
-
+import { JwPaginationComponent } from 'jw-angular-pagination';
 @NgModule({
   imports: [
     CommonModule,
@@ -35,7 +38,13 @@ import { UserEditComponent } from './users/user-edit/user-edit.component';
     UserAddComponent,
     UserListComponent,
     UserFormComponent,
-    UserEditComponent
+    UserEditComponent,
+    UserItemComponent,
+    UserFormModalComponent,
+    JwPaginationComponent
+  ],
+  entryComponents: [
+    UserFormModalComponent
   ]
 })
 export class DashboardPageModule {}

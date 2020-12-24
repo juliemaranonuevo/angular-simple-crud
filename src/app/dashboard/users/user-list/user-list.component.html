@@ -2,20 +2,42 @@
   <ion-header>
       <ion-toolbar>
           <ion-title>User Control</ion-title>
+          <p *ngIf="userActivated">Activated!</p>
           <ion-header-bar no-tap-scroll="true" class="bar-positive"></ion-header-bar>
       </ion-toolbar>
   </ion-header>
   <ion-grid no-padding>
       <ion-row>
-        <ion-col size-md="10" no-padding></ion-col>
+        <ion-col  size="12" no-padding *ngIf="error">
+            <ion-card color="danger">
+                <ion-card-header>
+                    <ion-card-title>
+                        An error occured!
+                    </ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <p>{{ error }}</p>
+                    <ion-button (click)="onHandleError()">Okay</ion-button>
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <!-- <ion-col size-md="10" no-padding></ion-col> -->
         <ion-col size="12" size-md="2" no-padding>
-            <ion-button routerLink="/users/create" expand="block" margin size="medium" fill="outline">
+            <ion-button *ngIf="!isMobileResolution" routerLink="/users/create" expand="block" margin size="medium">
+                <ion-icon slot="start" name="add"></ion-icon>
+                Add New User
+            </ion-button>
+            <ion-button *ngIf="isMobileResolution" expand="block" margin size="medium" (click)="openModalForm()">
                 <ion-icon slot="start" name="add"></ion-icon>
                 Add New User
             </ion-button>
         </ion-col>
+
       </ion-row>
-      <ion-row>
+      <!-- <ion-row>
         <ion-col size-md="10" no-padding></ion-col>
         <ion-col size="12" size-md="2" no-padding>
             <ion-button routerLink="/users/1/edit" expand="block" margin size="medium" fill="outline">
@@ -23,83 +45,118 @@
                 Edit
             </ion-button>
         </ion-col>
-      </ion-row>
-      <ion-row>
-          <ion-col size="12" size-md="12" no-padding>
-              <ion-grid no-padding>
-                  <ion-row>
-                      <ion-col col-2 class="header-cell-class">
-                          <ion-label>Fullname</ion-label>
-                      </ion-col>
-                      <ion-col col-2 class="header-cell-class ion-hide-sm-down">
-                        <ion-label>Address</ion-label>
-                      </ion-col>
-                      <ion-col col-2 class="header-cell-class ion-hide-md-down">
-                        <ion-label>Birthdate</ion-label>
-                      </ion-col>
-                      <ion-col col-2 class="header-cell-class ion-hide-md-down">
-                        <ion-label>Email</ion-label>
-                      </ion-col>
-                      <ion-col col-2 class="header-cell-class ion-hide-md-down">
-                        <ion-label>Contact No.</ion-label>
-                      </ion-col>
-                      <ion-col col-2 class="header-cell-class">
-                        <ion-label>Actions</ion-label>
-                      </ion-col>
-                  </ion-row>
-                  <ion-row>
-                    <ion-col col-2 class="content-cell-class">
-                        <ion-label>Añonuevo, Juliemar R.</ion-label>
-                    </ion-col>
-                    <ion-col col-2 class="content-cell-class ion-hide-sm-down">
-                      <ion-label>094 Rizal St. Brgy Segunda Pulo Lumban, Laguna</ion-label>
-                    </ion-col>
-                    <ion-col col-2 class="content-cell-class ion-hide-md-down">
-                      <ion-label>May 30, 1992</ion-label>
-                    </ion-col>
-                    <ion-col col-2 class="content-cell-class ion-hide-md-down">
-                      <ion-label>jamharu30@yahoo.com</ion-label>
-                    </ion-col>
-                    <ion-col col-2 class="content-cell-class ion-hide-md-down">
-                      <ion-label>09126545289</ion-label>
-                    </ion-col>
-                    <ion-col col-2 class="content-cell-class">
-                        <ion-button color="warning" size="small">
-                            <ion-icon 
-                              name="create-outline" 
-                              slot="start" 
-                              class="iconSize" 
-                              size="small"
-                            ></ion-icon>
-                            Edit
-                        </ion-button>
-                        <ion-button size="small">
-                            <ion-icon 
-                              name="eye-outline" 
-                              slot="start" 
-                              class="iconSize" 
-                              size="small"
-                            ></ion-icon>
-                            View
-                        </ion-button>
-                    </ion-col>
-                </ion-row>
-              </ion-grid>
+      </ion-row> -->
+     
+
+      <!-- <ion-row class="ion-hide-md-down">
+        <ion-col size="12" size-md="4" size-xl="3" class="ion-text-center" *ngFor="let user of loadedUsers">
+            <ion-card>
+              <ion-item routerLink="/users/{{ user.id }}" class="ion-activated">
+                <ion-avatar>
+                    <ion-img src="{{ user.image }}"></ion-img>
+                </ion-avatar>
+                <ion-card-header>
+                    <ion-card-title>{{ user.first_name  }}</ion-card-title>
+                    <ion-card-subtitle>{{ user.email  }}</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                </ion-card-content>
+              </ion-item>
+            </ion-card>
+        </ion-col>
+    </ion-row> -->
+
+    <!-- <ion-row class="ion-hide-md-down">
+        <ion-col size="12" size-md="4" size-xl="3" class="ion-text-center" *ngFor="let item of pageOfItems">
+            <ion-card>
+                <ion-item routerLink="/users/{{ item.name[item.id]['id']  }}" class="ion-activated">
+                    <ion-avatar>
+                        <ion-img src="{{ item.name[item.id]['image']  }}"></ion-img>
+                    </ion-avatar>
+                    <ion-card-header>
+                        <ion-card-title>{{ item.name[item.id]['first_name']  }}</ion-card-title>
+                        <ion-card-subtitle>{{ item.name[item.id]['email']  }}  {{ item.id  }}</ion-card-subtitle>
+                    </ion-card-header>
+                  </ion-item>
+            </ion-card>
+        </ion-col>
+    </ion-row> -->
+
+
+    <!-- <jw-pagination [items]="items" (changePage)="onChangePage($event)"></jw-pagination> -->
+
+    <ion-row class="ion-hide-md-down" *ngIf="total >= 0 && !isMobileResolution">
+        <ion-col size="12" size-md="4" size-xl="3" class="ion-text-center" *ngFor="let user of loadedUsers">
+            <!-- <ion-card>
+                <ion-avatar class="image-center">
+                    <ion-img class="first-image" src="{{ user.image }}"></ion-img>
+                </ion-avatar>
+                <ion-card-header>
+                    <ion-card-title>{{ user.first_name  }}</ion-card-title>
+                    <ion-card-subtitle>{{ user.email  }}</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    {{ user.id  }}
+                </ion-card-content>
+            </ion-card> -->
+            <ion-card>
+                <ion-item routerLink="/users/{{ user.id }}" class="ion-activated">
+                  <ion-avatar>
+                      <ion-img src="{{ user.image }}"></ion-img>
+                  </ion-avatar>
+                  <ion-card-header>
+                      <ion-card-title>{{ user.first_name  }}</ion-card-title>
+                      <ion-card-subtitle>{{ user.email  }}</ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content>
+                  </ion-card-content>
+                </ion-item>
+              </ion-card>
+        </ion-col>
+        <ion-col size="12" *ngIf="total > loadedUsers.length">
+            <ion-button (click)="firstPage(firstUrl)">First</ion-button>
+            <ion-button [disabled]="previousUrl === null" (click)="previousPage(previousUrl)">Previous</ion-button>
+            <span *ngFor="let pageNumber of items | slice:start:end;">
+                <ion-button 
+                    [disabled]="currentPageUrl === pageNumber.id" 
+                    (click)="pageNo(pathUrl + pageNumber.id)" 
+                    class="active"
+                >{{ pageNumber.id }}</ion-button>
+                <!-- <ion-button (click)="pageNo(pageNumber.url)" class="active">{{ pageNumber.id }}</ion-button> -->
+            </span>
+            <!-- <ion-button (click)="pageNo(nextUrl)" class="active">...</ion-button> -->
+            <ion-button [disabled]="nextUrl === null" (click)="nextPage(nextUrl)">Next</ion-button>
+            <ion-button (click)="lastPage(lastUrl)">Last</ion-button>
+        </ion-col>
+    </ion-row>
+    <!-- {{ total >= loadedUsers.length }}
+    <ion-row class="ion-hide-md-down" >
+        <ion-col size="12">
+            <ion-button (click)="firstPage(firstUrl)">First</ion-button>
+            <ion-button [disabled]="nextUrl === null" (click)="nextPage(nextUrl)">Next</ion-button>
+            <ion-button [disabled]="previousUrl === null" (click)="previousPage(previousUrl)">Previous</ion-button>
+            <ion-button (click)="lastPage(lastUrl)">Last</ion-button>
+        </ion-col>
+    </ion-row> -->
+
+      <ion-row class="ion-hide-md-up" *ngIf="total >= 0 && isMobileResolution">
+          <ion-col size="12" size-md="4" size-xl="3" class="ion-text-center" *ngFor="let user of loadedUsers">
+            <!-- <ion-item href="/users/{{ user.id }}" (click)="openModalForm()"> -->
+            <ion-item (click)="userDetailModal(user.id)">
+              <ion-avatar slot="start">
+                <ion-img src="{{ user.image }}"></ion-img>
+              </ion-avatar>
+              <ion-label>{{ user.first_name +' '+ user.id  }}</ion-label>
+            </ion-item>
           </ion-col>
-      </ion-row>
-      <ion-row>
-          <ion-col size="12" size-md="12" no-padding>
-              <ion-grid no-padding>
-                  <table>
-                      <tr>
-                          <th>Header 1</th>
-                          <th>Header 1</th>
-                          <th>Header 1</th>
-                          <th>Header 1</th>
-                      </tr>
-                  </table>
-              </ion-grid>
-          </ion-col>
+          <ion-col size="12" *ngIf="total > loadedUsers.length">
+            <ion-button 
+                fill="outline" 
+                expand="block" 
+                [disabled]="showMoreUrl === null" 
+                (click)="showMore(showMoreUrl)"
+            >Show More</ion-button>
+        </ion-col>
       </ion-row>
   </ion-grid>
 </ion-content>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
+import { UserService } from '../core/services/user.service';
 
 @Component({
   selector: 'app-side-menu',
@@ -9,7 +10,8 @@ import { MenuController } from '@ionic/angular';
 export class SideMenuComponent implements OnInit {
 
   constructor(
-    private menu: MenuController
+    private menu: MenuController,
+    private userService: UserService
   ) { }
 
   ngOnInit() {}
@@ -18,5 +20,9 @@ export class SideMenuComponent implements OnInit {
     this.menu.enable(true, 'start');
     this.menu.open('start');
     alert(this.menu.close)
+  }
+
+  onfetchUsers() {
+    this.userService.activatedEmitter.next(true);
   }
 }

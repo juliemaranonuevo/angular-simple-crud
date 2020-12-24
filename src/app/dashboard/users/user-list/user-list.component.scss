@@ -41,3 +41,19 @@ th, td {
     padding: 8px;
     border: 1px solid #ddd;
 }
+
+ion-img.first-image {
+    object-fit: contain;
+    height:90px;
+    width: 90px;
+    margin-left: -10px;
+    margin-bottom: auto;
+    // height: 70vh !important;
+    // width: auto !important;
+}
+
+.image-center{
+    margin:auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}

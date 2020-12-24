@@ -1,0 +1,32 @@
+<ion-content *ngIf="isMobileResolution">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>User Detail</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="onClose()">Close</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <app-user-form *ngIf="show" [userDetail]="userDetailModal"></app-user-form>
+</ion-content>
+
+<ion-content *ngIf="!isMobileResolution">
+  <ion-header>
+      <ion-toolbar>
+          <ion-title>User Detail</ion-title>
+          <ion-header-bar no-tap-scroll="true" class="bar-positive"></ion-header-bar>
+      </ion-toolbar>
+  </ion-header>
+  <ion-grid>
+      <ion-row>
+          <ion-col size="12" size-md="7">
+              <p *ngFor="let user of userDetail">
+                  {{ user.id  }}
+                  {{ user.first_name  }}
+                  {{ user.middle_name  }}
+              </p>
+              <app-user-form *ngIf="show" [userDetail]="userDetail"></app-user-form>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+</ion-content>
